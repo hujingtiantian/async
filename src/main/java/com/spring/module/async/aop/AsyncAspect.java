@@ -1,6 +1,7 @@
 package com.spring.module.async.aop;
 
 import com.spring.module.async.annotation.EnableAsyncExcute;
+import com.spring.module.async.model.AsyncFutureTask;
 import com.spring.module.async.threadpool.AsyncThreadPool;
 import com.spring.module.async.util.AsyncProxyUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -29,7 +30,7 @@ public class AsyncAspect {
         if(!checkRetClass(retClass)){
             return point.proceed();
         }
-        FutureTask futureTask = new FutureTask(new Callable() {
+        AsyncFutureTask futureTask = new AsyncFutureTask(new Callable() {
             @Override
             public Object call() throws Exception {
                 try {
@@ -52,7 +53,7 @@ public class AsyncAspect {
 
     private boolean checkRetClass(Class clazz){
         // 基本类型无法生成代理类
-        if(clazz.equals(Void.class)  ||  clazz.isPrimitive()){
+        if(clazz.isPrimitive()){
             return false;
         }
         return true;
