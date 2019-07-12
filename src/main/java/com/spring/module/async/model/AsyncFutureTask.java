@@ -13,6 +13,10 @@ import java.util.concurrent.FutureTask;
 @Slf4j
 public class AsyncFutureTask extends FutureTask {
 
+
+    private Thread parentThread;
+    private Thread runThread;
+
     private long startTime = 0;
     private long endTime = 0;
 
@@ -26,6 +30,7 @@ public class AsyncFutureTask extends FutureTask {
      */
     public AsyncFutureTask(Callable callable) {
         super(callable);
+        parentThread = Thread.currentThread();
     }
 
     /**
@@ -49,15 +54,31 @@ public class AsyncFutureTask extends FutureTask {
     @Override
     public void done() {
        endTime = System.currentTimeMillis();
-        log.info("线程: "+Thread.currentThread()+" 执行完毕,共花费时间："+(endTime-startTime)+"ms");
+       log.info("线程: "+Thread.currentThread()+" 执行完毕,共花费时间："+(endTime-startTime)+"ms");
     }
 
 
     @Override
     public void run(){
         startTime = System.currentTimeMillis();
+        runThread = Thread.currentThread();
         super.run();
     }
 
 
+    public Thread getParentThread() {
+        return parentThread;
+    }
+
+    public Thread getRunThread() {
+        return runThread;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
 }

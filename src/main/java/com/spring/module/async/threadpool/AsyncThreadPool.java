@@ -1,5 +1,8 @@
 package com.spring.module.async.threadpool;
 
+import com.spring.module.async.model.AsyncFutureTask;
+import org.springframework.scheduling.annotation.Async;
+
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,13 +40,13 @@ public class AsyncThreadPool {
 
     };
 
-    private static ThreadPoolExecutor threadPool;
+    private static AsyncThreadPoolExecutor threadPool;
     static {
-        threadPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME,
+        threadPool = new AsyncThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME,
                 TimeUnit.SECONDS, workQueue, threadFactory);
     }
 
-    public static Future submit(FutureTask futureTask){
+    public static Future submit(AsyncFutureTask futureTask){
         return threadPool.submit(futureTask);
     }
 
