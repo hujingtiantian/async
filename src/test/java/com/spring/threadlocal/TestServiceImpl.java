@@ -1,4 +1,4 @@
-package com.spring.module.async.test;
+package com.spring.threadlocal;
 
 import com.spring.module.async.annotation.EnableAsyncExcute;
 
@@ -10,34 +10,35 @@ import com.spring.module.async.annotation.EnableAsyncExcute;
 @EnableAsyncExcute
 public class TestServiceImpl {
 
-    public Object msg1(String msg){
+    public Object msg1(String msg,ThreadLocal threadLocal){
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("1"+msg);
+        System.out.println("msg1:"+threadLocal.get());
         return msg;
     }
 
 
-    public Object msg2(String msg){
+    public Object msg2(String msg,ThreadLocal threadLocal){
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("2"+msg);
+        System.out.println("msg2:"+threadLocal.get());
         return msg;
     }
 
-    public Object msg3(String msg){
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("3"+msg);
+    public Object msg3(String msg,ThreadLocal threadLocal){
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        System.out.println("msg3:"+threadLocal.get());
         return msg;
     }
+
 }

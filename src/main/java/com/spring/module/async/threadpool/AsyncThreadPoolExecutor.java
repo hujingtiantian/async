@@ -70,14 +70,35 @@ public class AsyncThreadPoolExecutor extends ThreadPoolExecutor {
     }
 
 
-
+    /****
+     *  submit -> execute -> beforeExecute -> run -> afterExecute
+     * */
     @Override
-    protected void afterExecute(Runnable r, Throwable t) {
+    protected void afterExecute(Runnable command, Throwable t) {
 
 
-        ReflectionUtils.setField(threadLocals,Thread.currentThread(),null);
+        if(command instanceof AsyncFutureTask){
+            if(ReflectionUtils.getField(threadLocals,((AsyncFutureTask) command).getRunThread()) != null){
+                Object o = ReflectionUtils.getField(threadLocals,Thread.currentThread());
 
-        ReflectionUtils.setField(inheritableThreadLocals,Thread.currentThread(),null);
 
+                ReflectionUtils.setField(threadLocals,((AsyncFutureTask) command).getRunThread(),null);
+                ReflectionUtils.setField(inheritableThreadLocals,((AsyncFutureTask) command).getRunThread(),null);
+
+
+                /***
+                 * There is a problem here that I don't quite understand.
+                 * If I don't assign a value to the parent thread, the parent thread cannot get the threadlocal variable.
+                 * why ？
+                 * */
+                ReflectionUtils.setField(threadLocals,((AsyncFutureTask) command).getParentThread(),o);
+                ReflectionUtils.setField(inheritableThreadLocals,((AsyncFutureTask) command).getParentThread(),o);
+
+            }
+        }
     }
+
+
+
+
 }
