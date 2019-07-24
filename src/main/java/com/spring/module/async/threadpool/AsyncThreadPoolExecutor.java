@@ -78,8 +78,6 @@ public class AsyncThreadPoolExecutor extends ThreadPoolExecutor {
 
         if(command instanceof AsyncFutureTask){
             if(ReflectionUtils.getField(threadLocals,((AsyncFutureTask) command).getRunThread()) != null){
-                Object o = ReflectionUtils.getField(threadLocals,Thread.currentThread());
-
 
                 ReflectionUtils.setField(threadLocals,((AsyncFutureTask) command).getRunThread(),null);
                 ReflectionUtils.setField(inheritableThreadLocals,((AsyncFutureTask) command).getRunThread(),null);
